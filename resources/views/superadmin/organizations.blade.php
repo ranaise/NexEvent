@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Manajemen Organisasi')
+@section('title', 'Organization Management')
 
 @section('content')
 <div class="container-fluid p-0">
@@ -15,7 +15,7 @@
     <div class="card shadow-sm border-0">
         <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
             <h6 class="mb-0 fw-bold text-gray-800"><i class="fas fa-sitemap me-2"></i>Daftar Organisasi Kampus</h6>
-            <button class="btn btn-primary btn-sm"><i class="fas fa-plus me-1"></i> Tambah Organisasi</button>
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addOrgModal"><i class="fas fa-plus me-1"></i> Tambah Organisasi</button>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -89,5 +89,67 @@
             </div>
         </div>
     </div>
+    <div class="modal fade text-start" id="addOrgModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h6 class="modal-title fw-bold"><i class="fas fa-plus-circle me-2"></i>Tambah Organisasi Baru</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="{{ route('superadmin.storeOrg') }}" method="POST">
+                    @csrf
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Nama Organisasi</label>
+                            <input type="text" name="organization" class="form-control" placeholder="Contoh: KMPA Tel-U" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Nama Perwakilan / Ketua</label>
+                            <input type="text" name="name" class="form-control" placeholder="Masukkan nama ketua" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Email Resmi</label>
+                            <input type="email" name="email" class="form-control" placeholder="hima@kampus.edu" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Password Default</label>
+                            <div class="input-group">
+                                <input type="password" id="passwordInput" name="password" class="form-control" placeholder="Buat password awal" required>
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword" title="Lihat/Sembunyikan Password">
+                                    <i class="fas fa-eye" id="eyeIcon"></i>
+                                </button>
+                            </div>
+                            <small class="text-muted">Password ini akan digunakan organisasi untuk login pertama kali.</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan Organisasi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('passwordInput');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        if(togglePassword) {
+            togglePassword.addEventListener('click', function () {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+        }
+    });
+</script>
 @endsection

@@ -8,39 +8,100 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        body { background-color: #f4f6f9; overflow-x: hidden; }
-        .sidebar { min-height: 100vh; background-color: #212529; color: white; width: 250px; }
-        .sidebar a { color: #adb5bd; text-decoration: none; padding: 12px 15px; display: block; transition: 0.3s; }
-        .sidebar a:hover { background-color: #343a40; color: #fff; border-radius: 5px; }
-        .sidebar a.active { background-color: #0d6efd; color: #fff; border-radius: 5px; }
-        .main-content { width: calc(100% - 250px); padding: 20px; }
+        :root {
+            --bg-body: #EEFAFF;
+            --input-bg: #FFFFFF;
+            --primary-color: #46A0E5;
+            --primary-hover: #3588C8;
+            --text-primary: #000000;
+            --text-secondary: #8E8E99;
+        }
+
+        body { 
+            background-color: var(--bg-body) !important; 
+            color: var(--text-primary) !important;
+            overflow-x: hidden; 
+        }
+        .main-content { 
+            width: calc(100% - 250px); 
+            padding: 20px; 
+        }
+
+        .sidebar { 
+            min-height: 100vh; 
+            background-color: #212529;
+            color: white; 
+            width: 250px; 
+        }
+        .sidebar a { 
+            color: #adb5bd; 
+            text-decoration: none; 
+            padding: 12px 15px; 
+            display: block; 
+            transition: 0.3s; 
+        }
+        .sidebar a:hover { 
+            background-color: #343a40; 
+            color: #fff; 
+            border-radius: 5px; 
+        }
+        .sidebar a.active { 
+            background-color: var(--primary-color) !important;
+            color: #fff; 
+            border-radius: 5px; 
+        }
+
+        .text-muted, .text-secondary {
+            color: var(--text-secondary) !important;
+        }
+        .btn-primary, .bg-primary {
+            background-color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+            color: #FFFFFF !important;
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-hover) !important;
+            border-color: var(--primary-hover) !important;
+        }
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+        .form-control, .form-select {
+            background-color: var(--input-bg) !important;
+            color: var(--text-primary) !important;
+        }
+        .card {
+            background-color: #FFFFFF !important;
+        }
     </style>
 </head>
 <body>
     <div class="d-flex">
         
-        <div class="sidebar p-3 shadow-sm">
-            <h4 class="text-center mb-4 mt-2 fw-bold text-white">
-                <i class="fas fa-ticket-alt text-primary me-2"></i>NexEvent
-            </h4>
+        <div class="sidebar">
+            <div class="text-center p-4 mb-2 border-bottom border-secondary">
+                <a href="{{ url('/') }}">
+                    <img src="{{ asset('images/logo.png') }}" alt="NexEvent Logo" style="max-width: 100%; height: auto; max-height: 40px; object-fit: contain;">
+                </a>
+            </div>
 
             @if(Auth::user()->role === 'superadmin')
                 <small class="text-warning text-uppercase fw-bold mb-2 d-block mt-3">Menu Kemahasiswaan</small>
                 
                 <a href="{{ route('superadmin.dashboard') }}" class="{{ request()->routeIs('superadmin.dashboard') ? 'active' : '' }}">
-                    <i class="fas fa-chart-pie me-2"></i> Dashboard Utama
+                    <i class="fas fa-chart-pie me-2"></i> Dashboard
                 </a>
                 
                 <a href="{{ route('superadmin.index') }}" class="{{ request()->routeIs('superadmin.index') ? 'active' : '' }}">
-                    <i class="fas fa-shield-alt me-2"></i> Pusat Approval
+                    <i class="fas fa-shield-alt me-2"></i> Approval Center
                 </a>
                 
                 <a href="{{ route('superadmin.allEvents') }}" class="{{ request()->routeIs('superadmin.allEvents') ? 'active' : '' }}">
-                    <i class="fas fa-list-alt me-2"></i> Semua Acara
+                    <i class="fas fa-list-alt me-2"></i> All Event
                 </a>
                 
                 <a href="{{ route('superadmin.organizations') }}" class="{{ request()->routeIs('superadmin.organizations') ? 'active' : '' }}">
-                    <i class="fas fa-sitemap me-2"></i> Manajemen Organisasi
+                    <i class="fas fa-sitemap me-2"></i> Organization Management
                 </a>
                 
             @else
@@ -52,10 +113,10 @@
                 <a href="{{ route('events.index') }}" class="{{ request()->routeIs('events.index') || request()->routeIs('events.create') ? 'active' : '' }}">
                     <i class="fas fa-calendar-alt me-2"></i> Daftar Acara
                 <a href="{{ route('participants.index') }}" class="{{ request()->routeIs('participants.index') ? 'active' : '' }}">
-                    <i class="fas fa-users me-2"></i> Manajemen Peserta
+                    <i class="fas fa-users me-2"></i> Participant Management
                 </a>
                 <a href="{{ route('attendance.index') }}" class="{{ request()->routeIs('attendance.index') ? 'active' : '' }}">
-                    <i class="fas fa-qrcode me-2"></i> Verifikasi Kehadiran
+                    <i class="fas fa-qrcode me-2"></i> Attendance Verification
                 </a>
                 
             @endif
@@ -79,7 +140,7 @@
                             <span class="d-block fw-semibold lh-1">{{ Auth::user()->name }}</span>
                             <small class="text-muted" style="font-size: 0.75rem;">{{ Auth::user()->organization ?? 'Superadmin' }}</small>
                         </div>
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=0d6efd&color=fff" class="rounded-circle shadow-sm" width="40" alt="Profile">
+                        <img src="https://api.dicebear.com/9.x/shapes/svg?seed={{ urlencode(Auth::user()->name) }}" alt="Logo Organisasi" class="rounded-circle border border-2 border-primary shadow-sm bg-white" style="width: 45px; height: 45px; object-fit: cover; padding: 2px;">
                     </div>
                 </div>
             </nav>

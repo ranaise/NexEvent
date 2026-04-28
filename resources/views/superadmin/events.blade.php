@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Semua Acara Kampus')
+@section('title', 'All Campus Event')
 
 @section('content')
 <div class="container-fluid p-0">
     <div class="card shadow-sm border-0">
         <div class="card-header bg-white py-3">
-            <h6 class="mb-0 fw-bold text-gray-800"><i class="fas fa-list-alt text-primary me-2"></i>Master Data Semua Acara</h6>
+            <h6 class="mb-0 fw-bold text-gray-800"><i class="fas fa-list-alt text-primary me-2"></i>All Event Data</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">

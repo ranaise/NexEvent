@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Acara Baru')
+@section('title', 'Add New Event')
 
 @section('content')
 <div class="container-fluid p-0">

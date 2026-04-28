@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard Superadmin')
+@section('title', 'Approval Center')
 
 @section('content')
 <div class="container-fluid p-0">

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\EventController;
 use App\Http\Controllers\Web\ParticipantController;
 use App\Http\Controllers\Web\AuthController;
+use App\Http\Controllers\Web\SuperadminController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', function () { return view('auth.login'); })->name('login');
@@ -30,10 +31,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/superadmin', [App\Http\Controllers\Web\SuperadminController::class, 'index'])->name('superadmin.index');
     Route::get('/superadmin/event/{id}', [App\Http\Controllers\Web\SuperadminController::class, 'showEvent'])->name('superadmin.showEvent');
     Route::get('/superadmin/all-events', [App\Http\Controllers\Web\SuperadminController::class, 'allEvents'])->name('superadmin.allEvents');
+    Route::get('/superadmin/events', [SuperadminController::class, 'index'])->name('superadmin.events');
 
     Route::get('/superadmin/organizations', [App\Http\Controllers\Web\SuperadminController::class, 'organizations'])->name('superadmin.organizations');
     Route::put('/superadmin/organizations/{id}', [App\Http\Controllers\Web\SuperadminController::class, 'updateOrganization'])->name('superadmin.updateOrg');
     Route::delete('/superadmin/organizations/{id}', [App\Http\Controllers\Web\SuperadminController::class, 'deleteOrganization'])->name('superadmin.deleteOrg');
+    Route::post('/superadmin/organizations', [SuperadminController::class, 'storeOrg'])->name('superadmin.storeOrg');
 
     Route::post('/superadmin/user/{id}', [App\Http\Controllers\Web\SuperadminController::class, 'approveUser'])->name('superadmin.approveUser');
     Route::post('/superadmin/event/{id}', [App\Http\Controllers\Web\SuperadminController::class, 'updateEventStatus'])->name('superadmin.updateEvent');

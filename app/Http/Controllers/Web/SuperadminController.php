@@ -53,11 +53,12 @@ class SuperadminController extends Controller
 
     public function dashboard()
     {
-        $totalEvent = Event::where('status', 'approved')->count();
-        $totalMhs = User::where('role', 'user')->count();
-        $totalOrg = User::where('role', 'admin')->count();
+        $totalOrgs = \App\Models\User::where('role', 'admin')->count();
+        $totalEvents = \App\Models\Event::count();
+        $totalPending = \App\Models\Event::where('status', 'pending')->count();
+        $pendingEvents = \App\Models\Event::with('user')->where('status', 'pending')->latest()->take(5)->get();
 
-        return view('superadmin.dashboard', compact('totalEvent', 'totalMhs', 'totalOrg'));
+        return view('superadmin.dashboard', compact('totalOrgs', 'totalEvents', 'totalPending', 'pendingEvents'));
     }
 
     public function organizations()
@@ -81,6 +82,28 @@ class SuperadminController extends Controller
     {
         User::findOrFail($id)->delete();
         return back()->with('success', 'Organisasi berhasil dihapus dari sistem!');
+    }
+
+    public function storeOrg(\Illuminate\Http\Request $request)
+    {
+        $request->validate([
+            'organization' => 'required|string|max:255',
+            'name'         => 'required|string|max:255',
+            'email'        => 'required|string|email|max:255|unique:users',
+            'password'     => 'required|string|min:6',
+        ], [
+            'email.unique' => 'Email ini sudah terdaftar, gunakan email lain.'
+        ]);
+
+        \App\Models\User::create([
+            'organization' => $request->organization,
+            'name'         => $request->name,
+            'email'        => $request->email,
+            'password'     => \Illuminate\Support\Facades\Hash::make($request->password),
+            'role'         => 'admin', 
+            'status'       => 'active'
+        ]);
+        return back()->with('success', 'Organisasi ' . $request->organization . ' berhasil ditambahkan!');
     }
 
 }
